@@ -24,13 +24,13 @@ https://github.com/mbdavid/LiteDB.Studio
 More info about LiteDB: https://www.litedb.org/
 
  
-## Arctek tutorial it self
+## Arctek tutorial links
 Links provided from top do down (Part 1 to 5)
-https://www.arctek.dev/blog/blog-with-csharp-pt1
-https://www.arctek.dev/blog/blog-with-csharp-pt2
-https://www.arctek.dev/blog/blog-with-csharp-pt3
-https://www.arctek.dev/blog/blog-with-csharp-pt4
-https://www.arctek.dev/blog/blog-with-csharp-pt5
+- https://www.arctek.dev/blog/blog-with-csharp-pt1
+- https://www.arctek.dev/blog/blog-with-csharp-pt2
+- https://www.arctek.dev/blog/blog-with-csharp-pt3
+- https://www.arctek.dev/blog/blog-with-csharp-pt4
+- https://www.arctek.dev/blog/blog-with-csharp-pt5
 
 ## Running code
 
