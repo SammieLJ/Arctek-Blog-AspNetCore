@@ -1,0 +1,38 @@
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="mb-4">Create New Post</h2>
+                    <form method="post" action="/admin/new/post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title" name="Title" required value="@(Context.Request.Query["title"])">
+                        </div>
+                        <div class="mb-3">
+                            <label for="excerpt" class="form-label">Excerpt</label>
+                            <input type="text" class="form-control" id="excerpt" name="Excerpt" required value="@(Context.Request.Query["excerpt"])">
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Content</label>
+                            <textarea class="form-control" id="content" name="Content" rows="8" required></textarea>
+                            <div class="form-text">Markdown formatting supported</div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="bi bi-save"></i> Create Post
+                            </button>
+                            <a href="/admin" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

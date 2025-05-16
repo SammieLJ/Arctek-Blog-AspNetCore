@@ -1,34 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\StormTrooper\\Documents\\AspNetCore_sourcecode\\Blog\\AspNetCore_sourcecode.csproj": {}
+    "C:\\Users\\User\\Documents\\GitHub\\Arctek-Blog-AspNetCore\\AspNetCore_sourcecode.csproj": {}
   },
   "projects": {
-    "C:\\Users\\StormTrooper\\Documents\\AspNetCore_sourcecode\\Blog\\AspNetCore_sourcecode.csproj": {
+    "C:\\Users\\User\\Documents\\GitHub\\Arctek-Blog-AspNetCore\\AspNetCore_sourcecode.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\StormTrooper\\Documents\\AspNetCore_sourcecode\\Blog\\AspNetCore_sourcecode.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\Arctek-Blog-AspNetCore\\AspNetCore_sourcecode.csproj",
         "projectName": "AspNetCore_sourcecode",
-        "projectPath": "C:\\Users\\StormTrooper\\Documents\\AspNetCore_sourcecode\\Blog\\AspNetCore_sourcecode.csproj",
-        "packagesPath": "C:\\Users\\StormTrooper\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\StormTrooper\\Documents\\AspNetCore_sourcecode\\Blog\\obj\\",
+        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\Arctek-Blog-AspNetCore\\AspNetCore_sourcecode.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\Arctek-Blog-AspNetCore\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\StormTrooper\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -36,14 +32,21 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
-        "netcoreapp3.1": {
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "LiteDB": {
               "target": "Package",
-              "version": "[5.0.8, )"
+              "version": "[5.0.21, )"
             },
             "Markdig": {
               "target": "Package",
@@ -56,10 +59,29 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.15, 8.0.15]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.15, 8.0.15]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.15, 8.0.15]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.15, 8.0.15]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -68,7 +90,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

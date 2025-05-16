@@ -1,33 +1,87 @@
 @{
-    //main layout
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var postsList = ((IEnumerable<dynamic>)Model)
+        .Select(p => new { 
+            title = p.Title, 
+            excerpt = p.Excerpt 
+        }).ToList(); // No .Take() here!
+    var postsJson = System.Text.Json.JsonSerializer.Serialize(postsList);
 }
-@{
-    // Anything in between these two curly braces will be handled by 
-    // the razor templating engine
-    // basically you can put almost any C# code in here and expect it to work
-    // Observe
-
-    string test = "Test";
-    string test2 = "123";
-    string newString = String.Format("{0} {1}", test, test2);
-
-	//Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<h1>Dave, I'm home!!</h1>
-<h2>@newString</h2>
-<p>
-    Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-    Optio voluptatibus illo eligendi nesciunt dolor sunt rem 
-    suscipit, quo, nemo recusandae earum impedit magni 
-    mollitia quod omnis nulla voluptatum. Quisquam, quis.
-</p>
-<section class="posts">
-	@foreach (var post in Model){
-        <div class="post">
-            <h2>@post.Title</h2>
-            <p>@post.Excerpt</p>
-            <a href="/post/@post.Title.Replace(' ','-')">read more</a>
+<div class="container mt-5">
+    <h1 class="mb-3">Dave, I'm home!!</h1>
+    <h2 class="text-muted mb-4">Test 123</h2>
+    <p class="lead">
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+        Optio voluptatibus illo eligendi nesciunt dolor sunt rem 
+        suscipit, quo, nemo recusandae earum impedit magni 
+        mollitia quod omnis nulla voluptatum. Quisquam, quis.
+    </p>
+    <div id="vue-posts-app">
+        <div class="row">
+            <div class="col-md-6 mb-4" v-for="(post, idx) in posts" :key="idx">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">@Html.Raw("{{ post.title }}")</h3>
+                        <p class="card-text">@Html.Raw("{{ post.excerpt }}")</p>
+                        <a :href="'/post/' + post.title.replace(/ /g, '-')" class="btn btn-primary">Read more</a>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div class="d-flex justify-content-center mt-4">
+            <nav>
+                <ul class="pagination">
+                    <li 
+                        class="page-item" 
+                        :class="{ disabled: currentPage === 1 }">
+                        <a class="page-link" href="#" v-on:click.prevent="currentPage--">Previous</a>
+                    </li>
+                    <li 
+                        v-for="page in totalPages" 
+                        :key="page" 
+                        class="page-item" 
+                        :class="{ active: currentPage === page }">
+                        <a class="page-link" href="#" v-on:click.prevent="currentPage = page">{{ page }}</a>
+                    </li>
+                    <li 
+                        class="page-item" 
+                        :class="{ disabled: currentPage === totalPages }">
+                        <a class="page-link" href="#" v-on:click.prevent="currentPage++">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<script>
+const { createApp } = Vue;
+
+const app = createApp({
+    data() {
+        return {
+            allPosts: @Html.Raw(postsJson),
+            currentPage: 1,
+            postsPerPage: 4
+        }
+    },
+    computed: {
+        posts() {
+            const start = (this.currentPage - 1) * this.postsPerPage;
+            const end = start + this.postsPerPage;
+            return this.allPosts.slice(start, end);
+        },
+        totalPages() {
+            return Math.ceil(this.allPosts.length / this.postsPerPage);
+        }
     }
-</section>
+});
+
+// Mount the app and store the instance
+const vm = app.mount('#vue-posts-app');
+
+// Now you can access posts in console
+console.log(vm.posts);
+
+// Alternative: Expose globally for debugging (optional)
+window.vm = vm;
+</script>

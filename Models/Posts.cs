@@ -1,3 +1,5 @@
+using System;
+
 namespace Blog.Models{
     public class Post : Model{
         public string Title {get;set;}
@@ -7,6 +9,6 @@ namespace Blog.Models{
         public string Excerpt {get;set;}
         public string CoverImagePath {get;set;} 
         public bool Public {get;set;}
-
+        public DateTime LastEdited { get; internal set; }
     }
 }

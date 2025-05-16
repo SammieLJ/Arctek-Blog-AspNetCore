@@ -1,11 +1,14 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<section class="post">
-    <h1>@Model.Title</h1>
-    <p class="content">
-        @Html.Raw(Markdig.Markdown.ToHtml(Model.Content))
-
-    </p>
-    <a href="/">Back</a>
-</section>
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h1 class="card-title mb-3">@Model.Title</h1>
+            <div class="content mb-4">
+                @Html.Raw(Markdig.Markdown.ToHtml(Model.Content))
+            </div>
+            <a href="/" class="btn btn-outline-secondary">Back</a>
+        </div>
+    </div>
+</div>

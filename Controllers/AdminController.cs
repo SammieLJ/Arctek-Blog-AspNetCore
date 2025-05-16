@@ -19,55 +19,125 @@ namespace Blog.Controllers{
             return View(BlogRepo.Posts.FindAll());
         }
 
-        // Since this method expects a GET request 
-        // we simply return the view responsible for
-        // creating the posts in question
-        [HttpGet, Route("new/post")]
-        public IActionResult NewPost(){
-            return View();
+        // GET /admin/new/post (show form)
+        [HttpGet("new/post")]
+        public IActionResult NewPost() {
+            return View("NewPost");
         }
 
-        // This method won't return anything but a status code
-        // that is because we'll be sending the post as a json string
-        // via javascript and then reacting to it without reloading the page
-        [HttpPost, Route("new/post")]
-        public IActionResult NewPost([FromBody]Post post){
-            BlogRepo.Posts.Insert(post);
+        // POST /admin/new/post (handle form submission)
+        [HttpPost("new/post")] 
+        public IActionResult CreatePost([FromForm] string Title, [FromForm] string Excerpt, [FromForm] string Content) {
+            try {
+                // Create new post object
+                var newPost = new Post {
+                    Title = Title,
+                    Excerpt = Excerpt,
+                    Content = Content,
+                    CoverImagePath = "", // Placeholder for cover image path
+                    Public = true, // Default to public
+                    Views = 0,
+                    Created = DateTime.Now,
+                    LastEdited = DateTime.Now
+                };
 
-            // set up the indices 
-            BlogRepo.Posts.EnsureIndex(p => p.Title,true); // ensures that the title is unique
-            BlogRepo.Posts.EnsureIndex(p => p._id, true); // ensures that the row has a valid bson index
+                // Insert into database
+                BlogRepo.Posts.Insert(newPost);
 
-            // check if the post has actually been created
-            if(BlogRepo.Posts.Find(p => p.Title == post.Title).FirstOrDefault() != null ){
-                // if the post actually exists return status code 201 - Created
-                return StatusCode(201);
+                // Ensure the post was actually created
+                var createdPost = BlogRepo.Posts.Find(p => p.Title == Title).FirstOrDefault();
+                if (createdPost == null) {
+                    return StatusCode(500, "Failed to create post");
+                }
+
+                // Create indexes if they don't exist
+                BlogRepo.Posts.EnsureIndex(p => p.Title, true); // Unique index
+                BlogRepo.Posts.EnsureIndex(p => p._id);
+
+                return RedirectToAction("Index");
             }
-            // We'll just assume something was wrong with the request
-            // in an actual serious application we'd obviously do a bit more
-            // to return a proper response to the user
-            // which would allow the user to correct his mistake
-            return StatusCode(400);
+            catch (Exception ex) {
+                // Log the error (you should implement proper logging)
+                return StatusCode(500, $"Error creating post: {ex.Message}");
+            }
+        }
+
+        // GET /admin/edit/post/{id}
+        [HttpGet("edit/post/{id}")]
+        public IActionResult EditPost(string id)
+        {
+            // Decode the URL-friendly title back to the original
+            var decodedTitle = Uri.UnescapeDataString(id).Replace("-", " ");
+            var post = BlogRepo.Posts.Find(p => p.Title == decodedTitle).FirstOrDefault();
+            
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return View("EditPost", post);
+        }
+
+        // POST /admin/edit/post/{id}
+        [HttpPost("edit/post/{id}")]
+        public IActionResult UpdatePost(string id, [FromForm] string Title, [FromForm] string Excerpt, [FromForm] string Content, [FromForm] bool? Public)
+        {
+            try
+            {
+                var decodedTitle = Uri.UnescapeDataString(id).Replace("-", " ");
+                var post = BlogRepo.Posts.Find(p => p.Title == decodedTitle).FirstOrDefault();
+                
+                if (post == null)
+                {
+                    return NotFound();
+                }
+
+                // Update post properties
+                post.Title = Title;
+                post.Excerpt = Excerpt;
+                post.Content = Content;
+                post.Public = Public ?? false; // If unchecked, set to false
+                post.LastEdited = DateTime.Now;
+
+                // Save changes
+                BlogRepo.Posts.Update(post);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error updating post: {ex.Message}");
+            }
         }
 
         // Http DELETE method 
         // Pretty self explanatory if you ask me
         // [FromBody] means that we'll expect a value to be passed in the body 
         // of the request with the key of postTitle
-        [HttpDelete, Route("post/delete")]
-        public IActionResult DeletePost([FromBody] Post post, [FromBody]string postTitle){
-            //BlogRepo.Posts.Delete(p => p.Title == postTitle);
-            if (post.Title == postTitle) {
-                BlogRepo.Posts.Delete(postTitle);
+        [HttpDelete("delete/post/{id}")]
+        public IActionResult DeletePost(string id)
+        {
+            try
+            {
+                // Find post by title (URL-decoded)
+                var decodedTitle = Uri.UnescapeDataString(id).Replace("-", " ");
+                var post = BlogRepo.Posts.Find(p => p.Title == decodedTitle).FirstOrDefault();
+                
+                if (post == null)
+                {
+                    return NotFound();
+                }
+
+                // Delete the post
+                BlogRepo.Posts.Delete(post._id);
+                return Ok();
             }
-            
-            // We check the exact opposite of what we checked in post create
-            // namely if the post does not exist anymore then we're all good
-            if (BlogRepo.Posts.Find(p => p.Title == postTitle).FirstOrDefault() == null){
-                return StatusCode(200);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error deleting post: {ex.Message}");
             }
-            return StatusCode(400);
         }
+
         // Http PUT method expected
         // Stands for update in this case 
         [HttpPut, Route("post/update")]
@@ -81,6 +151,6 @@ namespace Blog.Controllers{
                 return StatusCode(200);
             }
             return StatusCode(400);
-        }
+        } 
     }
 }

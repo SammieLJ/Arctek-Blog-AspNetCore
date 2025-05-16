@@ -1,45 +1,77 @@
 @{
     Layout = "~/Views/Shared/_adminLayout.cshtml";
+    var postsList = ((IEnumerable<dynamic>)Model).Select(p => new { title = p.Title }).ToList();
+    var postsJson = System.Text.Json.JsonSerializer.Serialize(postsList);
 }
-<a href="/admin/new/post"><button class="new-post">New</button></a>
-<div class="table">
-    @foreach (var post in Model){
-        <div class="row">
-            <div class="cell">
-                <input type="checkbox">
-            </div>
-            <div class="cell">
-                @post.Title
-            </div>
-            
-            <div class="cell control">
-                <button class="edit" post="@post.Title.Replace(' ','-')">Edit</button>
-            </div>
-            <div class="cell control">
-                <button class="delete" post="@post.Title.Replace(' ','-')">Delete</button>
-            </div>
-        </div>
-    }
+<div id="admin-posts-app" class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Posts</h2>
+        <a href="/admin/new/post" class="btn btn-success">New Post</a>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <input type="checkbox" v-on:click="toggleAll">
+                </th>
+                <th scope="col">Title</th>
+                <th scope="col" class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(post, idx) in posts" :key="idx">
+                <td>
+                    <input type="checkbox" v-model="selected" :value="post.title">
+                </td>
+                <td>{{ post.title }}</td>
+                <td class="text-end">
+                    <button class="btn btn-primary btn-sm me-2" v-on:click="editPost(post.title.replace(/ /g, '-'))">Edit</button>
+                    <button class="btn btn-danger btn-sm" v-on:click="deletePost(post.title.replace(/ /g, '-'))">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
-<style>
-    .table{
-        display:flex;
-        flex-direction: column;
-        width:100%;
+<script>
+const { createApp } = Vue;
+createApp({
+    data() {
+        return {
+            posts: @Html.Raw(postsJson),
+            selected: []
+        }
+    },
+    methods: {
+        toggleAll(event) {
+            if (event.target.checked) {
+                this.selected = this.posts.map(p => p.title);
+            } else {
+                this.selected = [];
+            }
+        },
+        editPost(postId) {
+            window.location.href = `/admin/edit/post/${postId}`;
+        },
+        deletePost(postId) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                fetch(`/admin/delete/post/${postId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the post from the UI
+                        this.posts = this.posts.filter(p => p.title.replace(/ /g, '-') !== postId);
+                    } else {
+                        alert('Failed to delete post');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error deleting post');
+                });
+            }
+        }
     }
-    .table .row{
-        display:grid;
-        grid-template-columns: auto 1fr 1fr 1fr;
-        padding:5px 0px;
-    }
-    .table .row .cell.control{
-        text-align: right;
-    }
-    .table .row:nth-child(2n+2){
-        background: #eee;
-    }
-    .table a{
-        text-decoration: none;
-    }
-</style>
+}).mount('#admin-posts-app');
+</script>

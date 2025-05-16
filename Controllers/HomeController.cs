@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Blog.Models.Repos;
+using System.Linq;
 
 namespace Blog.Controllers{
     // the slash means that this will be the default controller
@@ -20,11 +21,15 @@ namespace Blog.Controllers{
         public IActionResult Index(){
             BlogRepo blogRepo = new BlogRepo();
             //return Content("Home controller called!");
-            blogRepo.CreateExamplePosts();
+            //blogRepo.CreateExamplePosts();
+            
+            //var allPosts = blogRepo.Posts.FindAll().ToList();
+            //Console.WriteLine($"Total posts: {allPosts.Count}"); // Check count
+            //return View(allPosts);
 
             return View(blogRepo.Posts.Find(
-                p => p.Public == true && 
-                p.Created <= DateTime.Now && 
+                p => p.Public == true &&
+                p.Created <= DateTime.Now &&
                 p.Deleted == false)
             );
         }
