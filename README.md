@@ -72,4 +72,4 @@ Fast forward to **2025**, and I have updated code base with missing features. Ad
 
 Still it is good example to learn basics of AspNet Core
 
-I had to do a lot of modifications to the code, that would even compile. (a lot in BlogRepo.cs) But still nice example for beginners to take a look at this Blog application and see how it's build using modern web techniques. If you have any suggestions or would like to contribute to code base, feel free, it is open source.
+I had to do a lot of modifications to the code, that would even compile. (a lot in BlogRepo.cs) But still nice example for beginners to take a look at this Blog application and see how it's build using modern web techniques. Added Posts pagination and re-hauled Admin dashboard. If you have any suggestions or would like to contribute to code base, feel free, it is open source.
