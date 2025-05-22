@@ -1,5 +1,5 @@
 # Arctek-Blog-AspNetCore
-Implementation of Arctek Blog tutorial in AspNet Core 3.1
+Implementation of Arctek Blog tutorial in AspNet Core 3.1 and **updated to DotNet 8.0**
 
 ## Prerequisites
 
@@ -32,7 +32,7 @@ select $ from posts where _id = 9;
 ```
  
 ## Arctek original tutorial links
-Links provided from top do down (Part 1 to 5)
+Links provided from top do down (Part 1 to 5) (**update**:links don't existing, maybe in old .net magazines)
 - https://www.arctek.dev/blog/blog-with-csharp-pt1
 - https://www.arctek.dev/blog/blog-with-csharp-pt2
 - https://www.arctek.dev/blog/blog-with-csharp-pt3
