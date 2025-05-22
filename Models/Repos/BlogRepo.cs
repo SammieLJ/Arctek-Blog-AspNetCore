@@ -26,7 +26,11 @@ namespace Blog.Models.Repos
 
         }
         public void CreateExamplePosts()
-        {   
+        {
+            // Delete all existing posts
+            Posts.DeleteAll();
+            
+            // Create a list of example posts
             List<Post> PostList = new List<Post>(){
                 new Post(){
                     Title = "First post",

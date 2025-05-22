@@ -9,6 +9,7 @@ namespace Blog.Models{
         public string Excerpt {get;set;}
         public string CoverImagePath {get;set;} 
         public bool Public {get;set;}
+        public new DateTime Created { get; set; }
         public DateTime LastEdited { get; internal set; }
     }
 }

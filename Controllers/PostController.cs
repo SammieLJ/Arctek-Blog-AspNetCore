@@ -10,13 +10,13 @@ namespace Blog.Controllers{
         [Route("/post/{postTitle}")]
         public IActionResult Index([FromRoute] string postTitle){
             BlogRepo blogRepo = new BlogRepo();
-            blogRepo.CreateExamplePosts();
+            // blogRepo.CreateExamplePosts(); // Remove this in production!
 
-            return View(
-                blogRepo.Posts.Find(
-                    p => p.Title == postTitle.Replace("-", " ") 
-                ).FirstOrDefault()
-            );
+            // Find the post by id or title, and only if Public == true
+            var post = blogRepo.Posts.Find(p => p.Title.Replace(" ", "-") == postTitle && p.Public == true).FirstOrDefault();
+            if (post == null)
+                return NotFound();
+            return View(post);
         }
     }
 }

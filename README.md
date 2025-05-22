@@ -58,6 +58,17 @@ Go to http://localhost:5000 or https://localhost:5001 (in browser accept certifi
 
 For admin dashboard add /admin to url (http://localhost:5000/admin) and you will be able to manage (edit, delete), create new Post.
 
+## Migrate DB with example posts
+
+Migration will delete all previous posts and fill with example posts.
+```
+$ dotnet run -- -migrate CreateExamplePosts
+```
+
+## Validation and Sanitization of NoSQL data
+
+Added validation and sanitization, when adding NoSQL data.
+
 **User roles were not implemented!**
 
 ## What is not working?

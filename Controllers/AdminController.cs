@@ -25,9 +25,36 @@ namespace Blog.Controllers{
             return View("NewPost");
         }
 
+        // Helper: Sanitize and validate post data
+        private bool SanitizeAndValidatePost(ref string title, ref string excerpt, ref string content, out string error)
+        {
+            error = null;
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(excerpt) || string.IsNullOrWhiteSpace(content))
+            {
+                error = "Title, Excerpt, and Content are required.";
+                return false;
+            }
+            title = title.Trim();
+            excerpt = excerpt.Trim();
+            content = content.Trim();
+            if (title.Length > 100) title = title.Substring(0, 100);
+            if (excerpt.Length > 300) excerpt = excerpt.Substring(0, 300);
+            if (content.Length > 10000) content = content.Substring(0, 10000);
+            // Basic sanitization: remove dangerous chars
+            title = title.Replace("$", "").Replace(";", "");
+            excerpt = excerpt.Replace("$", "").Replace(";", "");
+            // Add more rules as needed
+            return true;
+        }
+
         // POST /admin/new/post (handle form submission)
         [HttpPost("new/post")] 
         public IActionResult CreatePost([FromForm] string Title, [FromForm] string Excerpt, [FromForm] string Content) {
+            string error;
+            if (!SanitizeAndValidatePost(ref Title, ref Excerpt, ref Content, out error))
+            {
+                return BadRequest(error);
+            }
             try {
                 // Create new post object
                 var newPost = new Post {
@@ -35,7 +62,7 @@ namespace Blog.Controllers{
                     Excerpt = Excerpt,
                     Content = Content,
                     CoverImagePath = "", // Placeholder for cover image path
-                    Public = true, // Default to public
+                    Public = true, // Always set to true for new posts
                     Views = 0,
                     Created = DateTime.Now,
                     LastEdited = DateTime.Now
